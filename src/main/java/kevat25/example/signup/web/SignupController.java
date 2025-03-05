@@ -1,28 +1,31 @@
 package kevat25.example.signup.web;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
+import org.springframework.ui.Model;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import kevat25.example.signup.model.Genre;
-import kevat25.example.signup.model.Trainers;
+import kevat25.example.signup.model.TrainerRepository;
 
 
-
-@SpringBootApplication
+@Controller
 public class SignupController {
 
-    private static final Logger log = LoggerFactory.getLogger(SignupController.class);
+	@Autowired
+	private TrainerRepository tRepository;
 
-    @Bean
-	public CommandLineRunner demo(TrainersRepository trepository, ExerciseRepository erepository, GenreRepository grepository) {
-		return (args) -> {
-			log.info("save a couple of students");
-			
+	@RequestMapping(value = "/login")
+    public String login() {
+        return "login";
+    }
+	
+	@RequestMapping(value = { "/", "/trainers" })
+    public String showTrainers(Model model) {
+        model.addAttribute("trainers", tRepository.findAll());
+        return "trainers";
+    }
 
-		};
-	}
+   
+   
     
 }

@@ -18,7 +18,7 @@ public class Dog {
 
     @ManyToOne
     @JoinColumn(name = "trainer_id", nullable = false)
-    private Trainers trainer;
+    private Trainer trainer;
 
     @ManyToOne
     @JoinColumn(name = "breed_id", nullable = false)
@@ -27,18 +27,14 @@ public class Dog {
     public Dog() {
     }
 
-    
-
-    public Dog(String name, String kennelName, Trainers trainer, Breed breed) {
+    public Dog(String name, String kennelName, Trainer trainer, Breed breed) {
         this.name = name;
         this.kennelName = kennelName;
         this.trainer = trainer;
         this.breed = breed;
     }
 
-
-
-    public Dog(String name, Trainers trainer, Breed breed) {
+    public Dog(String name, Trainer trainer, Breed breed) {
         this.name = name;
         this.trainer = trainer;
         this.breed = breed;
@@ -60,11 +56,11 @@ public class Dog {
         this.name = name;
     }
 
-    public Trainers getTrainer() {
+    public Trainer getTrainer() {
         return trainer;
     }
 
-    public void setTrainer(Trainers trainer) {
+    public void setTrainer(Trainer trainer) {
         this.trainer = trainer;
     }
 
@@ -76,21 +72,15 @@ public class Dog {
         this.breed = breed;
     }
 
-
-
     public String getKennelName() {
         return kennelName;
     }
-
-
 
     public void setKennelName(String kennelName) {
         this.kennelName = kennelName;
     }
 
-
-
-    public Dog(Long id, String name, String kennelName, Trainers trainer, Breed breed) {
+    public Dog(Long id, String name, String kennelName, Trainer trainer, Breed breed) {
         this.id = id;
         this.name = name;
         this.kennelName = kennelName;
@@ -98,5 +88,4 @@ public class Dog {
         this.breed = breed;
     }
 
-    
 }
