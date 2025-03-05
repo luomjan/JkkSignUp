@@ -5,31 +5,38 @@
 <head>
     <title>Kaikki treenaajat</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
 </head>
 
 <body>
     <div class="container">
-        <div class="col-md-4">
-            <h1>Treenaajat</h1>
-        </div>
+        <h1 class="text-primary">Treenaajat</h1>
+    </div>
 
-        <table>
-            <tr>
-                <th>Etunimi</th>
-                <th>Sukunimi</th>
-                <th>Koira</th>
-            </tr>
+    <table class="table table-light table-striped table-bordered table-sm">
+        <tr class="table-primary">
+            <th scope="col">Etunimi</th>
+            <th scope="col">Sukunimi</th>
+            <th scope="col">Koira(t)</th>
+        </tr>
+        <tbody class="table-group-divider">
             <tr th:each="trainer : ${trainers}">
                 <td th:text="${trainer.firstName}"></td>
                 <td th:text="${trainer.lastName}"></td>
+                <td>
+                    <ul>
+                        <li th:each="dog : ${trainer.dogs}" th:text="${dog.name}"></li>
+                    </ul>
+                </td>
             </tr>
-            <tr th:if="${#lists.isEmpty(trainers)}">
-                <td colspan="3">Ei treenaajia</td>
+        </tbody>
+        <tr th:if="${#lists.isEmpty(trainers)}">
+            <td colspan="3">Ei treenaajia</td>
 
-            </tr>
-        </table>
+        </tr>
+    </table>
 
-
+    <script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
