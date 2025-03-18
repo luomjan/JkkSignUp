@@ -1,5 +1,8 @@
 package kevat25.example.signup;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -11,7 +14,9 @@ import kevat25.example.signup.model.Breed;
 import kevat25.example.signup.model.BreedRepository;
 import kevat25.example.signup.model.Dog;
 import kevat25.example.signup.model.DogRepository;
+import kevat25.example.signup.model.Exercise;
 import kevat25.example.signup.model.ExerciseRepository;
+import kevat25.example.signup.model.Genre;
 import kevat25.example.signup.model.GenreRepository;
 import kevat25.example.signup.model.Trainer;
 import kevat25.example.signup.model.TrainerRepository;
@@ -31,7 +36,7 @@ public class SignupApplication {
 			GenreRepository gRepository, DogRepository dRepository, BreedRepository bRepository) {
 		return (args) -> {
 
-			log.info("save traines");
+			log.info("save trainers");
 			tRepository.save(new Trainer("admin", "$2a$05$s6rx2hOmx9N2bN6yqqxAO.nyDdOQDKHSKAR6wMjBNY2HGAtXiLx5q", "ADMIN", "Admin", "Admin"));
 			tRepository.save(new Trainer("user", "$2a$05$EyPQcXjdxcpuv11fIRBRku0qhCdRpm1wjKIw0dkftNA8tT2OHZGQO", "USER", "User", "User"));
 			tRepository.save(new Trainer("matti", "$2a$05$2yJeT4zjec0UXqLPaKInEuznKtoFgDKn8r4hYy7hgVpioyAPc7H6q", "USER", "Matti", "Meikäläinen"));
@@ -69,6 +74,26 @@ public class SignupApplication {
 			dRepository.save(new Dog("Freia", "Cloudmoore Hottest Fire Fox", matti, corgi));
 			dRepository.save(new Dog("Pomo", "", maija, labradori));
 			dRepository.save(new Dog("Riitu", "Kultasilmä Riitu", testi, suomenlapinkoira));
+
+			log.info("add genres");
+			gRepository.save(new Genre("Agility"));
+			gRepository.save(new Genre("Hoopers"));
+			gRepository.save(new Genre("Rally-toko"));
+			gRepository.save(new Genre("Toko"));
+			gRepository.save(new Genre("Näyttely"));
+
+			Genre agility =gRepository.findByGenre("Agility")
+			.orElseThrow(() -> new RuntimeException("Genre not found!"));
+			Genre rallyToko =gRepository.findByGenre("Rally-toko")
+			.orElseThrow(() -> new RuntimeException("Genre not found!"));
+			Genre hoopers =gRepository.findByGenre("Hoopers")
+			.orElseThrow(() -> new RuntimeException("Genre not found!"));
+
+			log.info("add exercises");
+			eRepository.save(new Exercise(agility, "Vimpeli", "Omatoimi agility", LocalDate.of(2025, 2, 21), LocalTime.of(16, 0)));
+			eRepository.save(new Exercise(rallyToko, "Vimpeli", "Omatoimi agility", LocalDate.of(2025, 2, 21), LocalTime.of(16, 0)));
+			eRepository.save(new Exercise(hoopers, "Vimpeli", "Omatoimi agility", LocalDate.of(2025, 2, 21), LocalTime.of(16, 0)));
+
 
 		};
 	}

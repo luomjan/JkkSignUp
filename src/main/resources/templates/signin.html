@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Ilmoittautuminen</title>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <h1>Ilmoittautuminen</h1>
+    <p>Tapahtuma: <span th:text="${exercise.genre.genre} + ' ' + ${exercise.exerciseDay}"></span></p>
+
+    <form action="#" th:action="@{/saveSignup}" method="post">
+        <input type="hidden" name="exerciseId" th:value="${exercise.id}" />
+
+        <label for="trainerDog">Valitse treenaaja ja koira:</label>
+        <select id="trainerDog" name="dogId">
+            <option th:each="trainer : ${trainers}" th:if="${not #lists.isEmpty(trainer.dogs)}">
+
+            </option>
+        </select>
+
+        <button type="submit">Tallenna</button>
+    </form>
+
+    <p th:if="${message}" th:text="${message}" style="color: green;"></p>
+</body>
+
+</html>

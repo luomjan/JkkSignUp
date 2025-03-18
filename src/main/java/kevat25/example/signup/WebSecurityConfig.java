@@ -17,40 +17,37 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig {
 
+        private UserDetailsService userDetailsService;
 
-    private UserDetailsService userDetailsService; 
+        public WebSecurityConfig(UserDetailsService userDetailsService) {
+                this.userDetailsService = userDetailsService;
+        }
 
-   
-    public WebSecurityConfig(UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
+        private static final AntPathRequestMatcher[] WHITE_LIST_URLS = {
+                        new AntPathRequestMatcher("/api/**"),
+                        new AntPathRequestMatcher("/h2-console/**") };
 
-    private static final AntPathRequestMatcher[] WHITE_LIST_URLS = {
-            new AntPathRequestMatcher("/api/**"),
-            new AntPathRequestMatcher("/h2-console/**") };
+        @Bean
+        public SecurityFilterChain configure(HttpSecurity http) throws Exception {
 
-    @Bean
-    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+                http.authorizeHttpRequests(
+                                authorize -> authorize
+                                                .requestMatchers(antMatcher("/css/**")).permitAll()
+                                                .requestMatchers(WHITE_LIST_URLS).permitAll()
+                                                .anyRequest().authenticated())
+                                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions
+                                                .disable())) // for h2console
+                                .formLogin(formlogin -> formlogin.loginPage("/login")
+                                                .defaultSuccessUrl("/main", true)
+                                                .permitAll())
+                                .logout(logout -> logout.permitAll())
+                                .csrf(csrf -> csrf.disable()); // not for production, just for development
 
-        http.authorizeHttpRequests(
-                authorize -> authorize
-                        .requestMatchers(antMatcher("/css/**")).permitAll()
-                        .requestMatchers(WHITE_LIST_URLS).permitAll()
-                        .anyRequest().authenticated())
-                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions
-                        .disable())) // for h2console
-                .formLogin(formlogin -> formlogin.loginPage("/login")
-                        .defaultSuccessUrl("/trainers", true)
-                        .permitAll())
-                .logout(logout -> logout.permitAll())
-                .csrf(csrf -> csrf.disable()); // not for production, just for development
+                return http.build();
+        }
 
-        return http.build();
-    }
-
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
-    }
+        @Autowired
+        public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+                auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
+        }
 }
-

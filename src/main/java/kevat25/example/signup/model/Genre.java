@@ -2,7 +2,7 @@ package kevat25.example.signup.model;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 
@@ -11,13 +11,14 @@ public class Genre {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long genreId;
+    @Column(name = "genre_id")
+    private Long id;
 
     private String genre;
 
-    @JsonIgnoreProperties("genre")
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "genre")
-    private List<Exercise> exercise;
+    private List<Exercise> exercises;
 
     public Genre() {
     }
@@ -26,12 +27,12 @@ public class Genre {
         this.genre = genre;
     }
 
-    public Long getGenreId() {
-        return genreId;
+    public Long getId() {
+        return id;
     }
 
-    public void setGenreId(Long genreId) {
-        this.genreId = genreId;
+    public void seId(Long id) {
+        this.id = id;
     }
 
     public String getGenre() {
@@ -42,19 +43,16 @@ public class Genre {
         this.genre = genre;
     }
 
-    public List<Exercise> getExercise() {
-        return exercise;
+    public List<Exercise> getExercises() {
+        return exercises;
     }
 
-    public void setExercise(List<Exercise> exercise) {
-        this.exercise = exercise;
+    public void setExercises(List<Exercise> exercises) {
+        this.exercises = exercises;
     }
 
     @Override
     public String toString() {
-        return "Genre [genreId=" + genreId + ", genre=" + genre + ", exercise=" + exercise + "]";
+        return "Genre [id=" + id + ", genre=" + genre + "]";
     }
-
-    
-    
 }
