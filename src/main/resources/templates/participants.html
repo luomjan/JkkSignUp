@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Osallistujalista</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+
+<body>
+    <h1>Osallistujalista</h1>
+    <p>Tapahtuma: <span th:text="${exercise.genre.genre} + ' ' + ${exercise.exerciseDay}"></span></p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Treenaaja</th>
+                <th>Koira</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="attend : ${attendees}">
+                <td th:text="${attend.trainer.firstName}"></td>
+                <td th:text="${attend.dog.name}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="/main" class="btn btn-secondary">Takaisin</a>
+</body>
+
+</html>

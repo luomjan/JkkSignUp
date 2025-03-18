@@ -13,11 +13,16 @@
     <form action="#" th:action="@{/saveSignup}" method="post">
         <input type="hidden" name="exerciseId" th:value="${exercise.id}" />
 
-        <label for="trainerDog">Valitse treenaaja ja koira:</label>
-        <select id="trainerDog" name="dogId">
-            <option th:each="trainer : ${trainers}" th:if="${not #lists.isEmpty(trainer.dogs)}">
+        <label for="trainerlist">Valitse treenaaja</label>
+        <select id="trainerlist" name="trainerId" class="form-control">
+            <option value="">-- Valitse treenaaja --</option>
+            <option th:each="trainer : ${trainers}" th:value="${trainer.id}" th:text="${trainer.firstName}"></option>
+        </select>
 
-            </option>
+        <label for="doglist">Valitse koira</label>
+        <select id="doglist" name="dogId" class="form-control" required>
+            <option value="">-- Valitse koira --</option>
+            <option th:each="dog : ${dogs}" th:value="${dog.id}" th:text="${dog.name}"></option>
         </select>
 
         <button type="submit">Tallenna</button>

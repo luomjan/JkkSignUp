@@ -26,6 +26,7 @@
             <td th:text="${exercise.place}"></td>
             <td><a th:href="@{/signin/{id}(id=${exercise.id})}">Ilmoittaudu</a></td>
             <td><a th:href="@{/edit/{id}(id=${exercise.id})}">Muokkaa</a></td>
+            <td><a th:href="@{/participants/{id}(id=${exercise.id})}">Näytä osallistujat</a></td>
         </tr>
     </table>
     <div class="mt-4">

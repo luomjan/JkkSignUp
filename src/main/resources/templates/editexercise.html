@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Muokkaa harjoitusta</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+
+<body>
+    <h1>Muokkaa harjoitusta</h1>
+
+    <form action="#" th:action="@{/updateExercise}" th:object="${exercise}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <label for="genre">Laji:</label>
+        <select id="genre" name="genreId" class="form-control" required>
+            <option th:each="g : ${genres}" th:value="${g.id}" th:text="${g.genre}"></option>
+        </select>
+
+        <label for="place">Paikka:</label>
+        <input type="text" id="place" th:field="*{place}" class="form-control" required />
+
+        <label for="description">Kuvaus:</label>
+        <textarea id="description" th:field="*{description}" class="form-control"></textarea>
+
+        <label for="exerciseDay">Päivämäärä:</label>
+        <input type="date" id="exerciseDay" th:field="*{exerciseDay}" class="form-control" required />
+
+        <label for="exerciseTime">Aika:</label>
+        <input type="time" id="exerciseTime" th:field="*{exerciseTime}" class="form-control" required />
+
+        <button type="submit" class="btn btn-primary">Tallenna muutokset</button>
+        <a href="/main" class="btn btn-secondary">Peruuta</a>
+    </form>
+</body>
+
+</html>

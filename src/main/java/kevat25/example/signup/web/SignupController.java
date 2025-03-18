@@ -2,6 +2,8 @@ package kevat25.example.signup.web;
 
 import org.springframework.ui.Model;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,8 @@ import kevat25.example.signup.model.Dog;
 import kevat25.example.signup.model.DogRepository;
 import kevat25.example.signup.model.Exercise;
 import kevat25.example.signup.model.ExerciseRepository;
+import kevat25.example.signup.model.Genre;
+import kevat25.example.signup.model.GenreRepository;
 import kevat25.example.signup.model.Trainer;
 import kevat25.example.signup.model.TrainerRepository;
 
@@ -37,6 +41,9 @@ public class SignupController {
 
     @Autowired
     private AttendRepository aRepository;
+
+    @Autowired
+    private GenreRepository gRepository;
 
     @RequestMapping(value = "/login")
     public String login() {
@@ -59,6 +66,10 @@ public class SignupController {
         tRepository.findAll().forEach(trainers::add);
         model.addAttribute("trainers", trainers);
 
+        List<Dog> dogs = new ArrayList<>();
+        dRepository.findAll().forEach(dogs::add);
+        model.addAttribute("dogs", dogs);
+
         return "signin";
     }
 
@@ -79,6 +90,57 @@ public class SignupController {
         aRepository.save(attend);
 
         redirectAttributes.addFlashAttribute("message", "Ilmoittautuminen lisätty!");
+        return "redirect:/main";
+    }
+
+    @RequestMapping(value = "/participants/{id}")
+    public String showParticipants(@PathVariable("id") Long exerciseId, Model model) {
+        Exercise exercise = eRepository.findById(exerciseId)
+                .orElseThrow(() -> new RuntimeException("Exercise not found"));
+        model.addAttribute("exercise", exercise);
+
+        List<Attend> attendees = aRepository.findByExercise(exercise);
+        model.addAttribute("attendees", attendees);
+
+        return "participants";
+    }
+
+    @RequestMapping(value = "/edit/{id}")
+    public String editExercise(@PathVariable("id") Long exerciseId, Model model) {
+        Exercise exercise = eRepository.findById(exerciseId)
+                .orElseThrow(() -> new RuntimeException("Exercise not found"));
+        model.addAttribute("exercise", exercise);
+
+        // Lisää genre-lista dropdownia varten
+        model.addAttribute("genres", gRepository.findAll());
+
+        return "editexercise";
+    }
+
+    @PostMapping("/updateExercise")
+    public String updateExercise(@RequestParam Long id,
+            @RequestParam Long genreId,
+            @RequestParam String place,
+            @RequestParam String description,
+            @RequestParam LocalDate exerciseDay,
+            @RequestParam LocalTime exerciseTime,
+            RedirectAttributes redirectAttributes) {
+
+        Exercise exercise = eRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Exercise not found"));
+
+        Genre genre = gRepository.findById(genreId)
+                .orElseThrow(() -> new RuntimeException("Genre not found"));
+
+        exercise.setGenre(genre);
+        exercise.setPlace(place);
+        exercise.setDescription(description);
+        exercise.setExerciseDay(exerciseDay);
+        exercise.setExerciseTime(exerciseTime);
+
+        eRepository.save(exercise);
+
+        redirectAttributes.addFlashAttribute("message", "Harjoitus päivitetty!");
         return "redirect:/main";
     }
 
