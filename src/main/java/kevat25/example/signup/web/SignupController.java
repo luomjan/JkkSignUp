@@ -10,6 +10,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -110,37 +111,14 @@ public class SignupController {
         Exercise exercise = eRepository.findById(exerciseId)
                 .orElseThrow(() -> new RuntimeException("Exercise not found"));
         model.addAttribute("exercise", exercise);
-
-        // Lisää genre-lista dropdownia varten
-        model.addAttribute("genres", gRepository.findAll());
-
+        model.addAttribute("genres", gRepository.findAll()); // Oletus: GenreRepository on olemassa
         return "editexercise";
     }
 
-    @PostMapping("/updateExercise")
-    public String updateExercise(@RequestParam Long id,
-            @RequestParam Long genreId,
-            @RequestParam String place,
-            @RequestParam String description,
-            @RequestParam LocalDate exerciseDay,
-            @RequestParam LocalTime exerciseTime,
-            RedirectAttributes redirectAttributes) {
-
-        Exercise exercise = eRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Exercise not found"));
-
-        Genre genre = gRepository.findById(genreId)
-                .orElseThrow(() -> new RuntimeException("Genre not found"));
-
-        exercise.setGenre(genre);
-        exercise.setPlace(place);
-        exercise.setDescription(description);
-        exercise.setExerciseDay(exerciseDay);
-        exercise.setExerciseTime(exerciseTime);
-
+    @RequestMapping(value = "/saveExercise")
+    public String saveExercise(@ModelAttribute Exercise exercise, RedirectAttributes redirectAttributes) {
         eRepository.save(exercise);
-
-        redirectAttributes.addFlashAttribute("message", "Harjoitus päivitetty!");
+        redirectAttributes.addFlashAttribute("message", "Exercise updated successfully!");
         return "redirect:/main";
     }
 

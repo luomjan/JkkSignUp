@@ -1,38 +1,53 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Muokkaa harjoitusta</title>
-    <meta charset="UTF-8">
+    <title>Muokkaa treeniä</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="/css/bootstrap.min.css">
 </head>
 
 <body>
-    <h1>Muokkaa harjoitusta</h1>
+    <div class="container mt-4">
+        <h1 class="mb-4">Muokkaa treeniä</h1>
+        <div class="card p-4">
+            <form th:object="${exercise}" th:action="@{/saveExercise}" method="post">
+                <input type="hidden" th:field="*{id}" />
 
-    <form action="#" th:action="@{/updateExercise}" th:object="${exercise}" method="post">
-        <input type="hidden" th:field="*{id}" />
+                <div class="mb-3">
+                    <label for="genre" class="form-label">Laji</label>
+                    <select id="genre" th:field="*{genre}" class="form-control">
+                        <option th:each="genre : ${genres}" th:value="${genre.id}" th:text="${genre.genre}"></option>
+                    </select>
+                </div>
 
-        <label for="genre">Laji:</label>
-        <select id="genre" name="genreId" class="form-control" required>
-            <option th:each="g : ${genres}" th:value="${g.id}" th:text="${g.genre}"></option>
-        </select>
+                <div class="mb-3">
+                    <label for="place" class="form-label">Paikka</label>
+                    <input type="text" id="place" th:field="*{place}" class="form-control" />
+                </div>
 
-        <label for="place">Paikka:</label>
-        <input type="text" id="place" th:field="*{place}" class="form-control" required />
+                <div class="mb-3">
+                    <label for="description" class="form-label">Kuvaus</label>
+                    <input type="text" id="description" th:field="*{description}" class="form-control" />
+                </div>
 
-        <label for="description">Kuvaus:</label>
-        <textarea id="description" th:field="*{description}" class="form-control"></textarea>
+                <div class="mb-3">
+                    <label for="exerciseDay" class="form-label">Päivämäärä</label>
+                    <input type="date" id="exerciseDay" th:field="*{exerciseDay}" class="form-control" />
+                </div>
 
-        <label for="exerciseDay">Päivämäärä:</label>
-        <input type="date" id="exerciseDay" th:field="*{exerciseDay}" class="form-control" required />
+                <div class="mb-3">
+                    <label for="exerciseTime" class="form-label">Aika</label>
+                    <input type="time" id="exerciseTime" th:field="*{exerciseTime}" class="form-control" />
+                </div>
 
-        <label for="exerciseTime">Aika:</label>
-        <input type="time" id="exerciseTime" th:field="*{exerciseTime}" class="form-control" required />
-
-        <button type="submit" class="btn btn-primary">Tallenna muutokset</button>
-        <a href="/main" class="btn btn-secondary">Peruuta</a>
-    </form>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Tallenna muutokset</button>
+                    <a href="/main" class="btn btn-secondary">Peruuta</a>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 
 </html>
