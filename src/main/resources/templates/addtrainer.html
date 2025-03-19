@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Lisää treenaaja ja koira</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+
+<body class="bg-light">
+    <div class="container">
+        <div class="py-5 text-center">
+            <h1>Lisää treenaaja ja koira</h1>
+        </div>
+
+        <form th:object="${trainer}" th:action="@{/savetrainer}" method="post">
+            <div class="row">
+
+                <div class="col-md-6">
+                    <h3>Treenaajan tiedot</h3>
+                    <div class="mb-3">
+                        <label for="uName" class="form-label">Käyttäjänimi</label>
+                        <input type="text" id="uName" th:field="*{userName}" class="form-control" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="pWord" class="form-label">Salasana</label>
+                        <input type="password" id="pWord" th:field="*{password}" class="form-control" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="fName" class="form-label">Etunimi</label>
+                        <input type="text" id="fName" th:field="*{firstName}" class="form-control" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="lName" class="form-label">Sukunimi</label>
+                        <input type="text" id="lName" th:field="*{lastName}" class="form-control" />
+                    </div>
+                </div>
+
+
+                <div class="col-md-6">
+                    <h3>Koiran tiedot</h3>
+                    <div class="mb-3">
+                        <label for="dogName" class="form-label">Kutsumanimi</label>
+                        <input type="text" id="dogName" name="name" class="form-control" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="kennelName" class="form-label">Kennelnimi</label>
+                        <input type="text" id="kennelName" name="kennelName" class="form-control" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="breed" class="form-label">Rotu</label>
+                        <select id="breed" name="dogBreedId" class="form-control">
+                            <option value="">-- Valitse rotu --</option>
+                            <option th:each="breed : ${breeds}" th:value="${breed.breedId}" th:text="${breed.breed}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary">Tallenna</button>
+                <a href="/main" class="btn btn-secondary">Peruuta</a>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

@@ -33,6 +33,12 @@ public class Dog {
         this.trainer = trainer;
         this.breed = breed;
     }
+    
+
+    public Dog(String name, String kennelName) {
+        this.name = name;
+        this.kennelName = kennelName;
+    }
 
     public Dog(String name, Trainer trainer, Breed breed) {
         this.name = name;

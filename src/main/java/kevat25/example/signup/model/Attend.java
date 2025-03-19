@@ -9,9 +9,6 @@ public class Attend {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "trainer_id", nullable = false)
-    private Trainer trainer;
 
     @ManyToOne
     @JoinColumn(name = "dog_id", nullable = false)
@@ -27,17 +24,11 @@ public class Attend {
     }
 
 
-    public Attend(Trainer trainer, Dog dog, Exercise exercise) {
-        this.trainer = trainer;
-        this.dog = dog;
-        this.exercise = exercise;
-    }
-
-
     public Attend(Dog dog, Exercise exercise) {
         this.dog = dog;
         this.exercise = exercise;
     }
+
 
 
     public Long getId() {
@@ -70,20 +61,16 @@ public class Attend {
     }
 
 
-    public Trainer getTrainer() {
-        return trainer;
-    }
-
-
-    public void setTrainer(Trainer trainer) {
-        this.trainer = trainer;
-    }
 
 
     @Override
     public String toString() {
-        return "Attend [id=" + id + ", trainer=" + trainer + ", dog=" + dog + ", exercise=" + exercise + "]";
+        return "Attend [id=" + id + ", dog=" + dog + ", exercise=" + exercise + "]";
     }
+
+
+   
+
 
     
 

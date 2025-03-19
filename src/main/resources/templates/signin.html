@@ -4,31 +4,38 @@
 <head>
     <title>Ilmoittautuminen</title>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
 </head>
 
-<body>
-    <h1>Ilmoittautuminen</h1>
-    <p>Tapahtuma: <span th:text="${exercise.genre.genre} + ' ' + ${exercise.exerciseDay}"></span></p>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="card shadow-lg p-4">
+            <h1 class="text-center text-primary mb-4">Ilmoittautuminen</h1>
+            <p class="text-center">
+                <strong>Tapahtuma:</strong>
+                <span th:text="${exercise.genre.genre} + ' ' + ${exercise.exerciseDay}"></span>
+            </p>
 
-    <form action="#" th:action="@{/saveSignup}" method="post">
-        <input type="hidden" name="exerciseId" th:value="${exercise.id}" />
+            <form action="#" th:action="@{/saveSignup}" method="post">
+                <input type="hidden" name="exerciseId" th:value="${exercise.id}" />
 
-        <label for="trainerlist">Valitse treenaaja</label>
-        <select id="trainerlist" name="trainerId" class="form-control">
-            <option value="">-- Valitse treenaaja --</option>
-            <option th:each="trainer : ${trainers}" th:value="${trainer.id}" th:text="${trainer.firstName}"></option>
-        </select>
+                <div class="mb-3">
+                    <label for="doglist" class="form-label">Valitse treenaaja</label>
+                    <select id="doglist" name="dogId" class="form-control form-control-lg" required>
+                        <option value="">-- Valitse treenaaja --</option>
+                        <option th:each="dog : ${dogs}" th:value="${dog.id}"
+                            th:text="${dog.name} + ' (' + ${dog.trainer.firstName} + ' ' + ${dog.trainer.lastName} + ')'">
+                        </option>
+                    </select>
+                </div>
 
-        <label for="doglist">Valitse koira</label>
-        <select id="doglist" name="dogId" class="form-control" required>
-            <option value="">-- Valitse koira --</option>
-            <option th:each="dog : ${dogs}" th:value="${dog.id}" th:text="${dog.name}"></option>
-        </select>
-
-        <button type="submit">Tallenna</button>
-    </form>
-
-    <p th:if="${message}" th:text="${message}" style="color: green;"></p>
+                <div class="d-flex flex-column gap-2">
+                    <button type="submit" class="btn btn-primary w-100">Tallenna</button>
+                    <a href="/main" class="btn btn-secondary w-100">Takaisin</a>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 
 </html>

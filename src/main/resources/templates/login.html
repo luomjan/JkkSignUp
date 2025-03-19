@@ -1,24 +1,37 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
-    <head>
-        <title>Login for sign up </title>
-    </head>
-    <body>
-        <h1>Kirjaudu sisään</h1>
-     <div>
-        <div class="alert alert-danger" th:if="${param.error}">
-            Invalid username and password.
-        </div>
-        <div class="alert alert-warning" th:if="${param.logout}">
-            You have been logged out.
-        </div>
-        <form th:action="@{/login}" method="post">
-            <div><label> User Name : <input type="text" name="username" class="form-control"/> </label></div>
-            <div><label> Password: <input type="password" name="password" class="form-control"/> </label></div>
-            <div><input type="submit" value="Sign In" class="btn btn-primary"/></div>
-        </form>
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<link rel="stylesheet" href="/css/bootstrap.min.css">
 
-       </div>
-    </body>
+<head>
+    <title>Login for sign up </title>
+</head>
+
+<body class="d-flex justify-content-center align-items-center vh-100 bg-light">
+    <div class="card shadow-lg p-4" style="max-width: 400px; width: 100%;">
+        <h1 class="text-center">Kirjaudu sisään</h1>
+
+        <div th:if="${param.error}" class="alert alert-danger text-center">
+            Virheellinen käyttäjätunnus tai salasana.
+        </div>
+        <div th:if="${param.logout}" class="alert alert-warning text-center">
+            Olet kirjautunut ulos.
+        </div>
+
+        <form th:action="@{/login}" method="post">
+            <div class="mb-3">
+                <label for="username" class="form-label">Käyttäjätunnus</label>
+                <input type="text" id="username" name="username" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Salasana</label>
+                <input type="password" id="password" name="password" class="form-control" required />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Kirjaudu sisään</button>
+        </form>
+    </div>
+</body>
+
 </html>
