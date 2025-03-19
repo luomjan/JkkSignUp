@@ -1,0 +1,101 @@
+import java.util.List;
+import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
+
+@RestController
+public class SignupRestController {
+    private static final Logger log = LoggerFactory.getLogger(SignupRestController.class);
+
+    private final AttendRepository aRepository;
+    private final DogRepository dRepository;
+    private final ExerciseRepository eRepository;
+    private final TrainerRepository tRepository;
+    private final GenreRepository gRepository;
+
+    public SignupRestController(AttendRepository aRepository, DogRepository dRepository, ExerciseRepository eRepository, TrainerRepository tRepository, GenreRepository gRepository){
+        this.aRepository = aRepository;
+        this.dRepository = dReposiroty;
+        this.eRepository = eRepository;
+        this.tRepository = tRepository;
+        this.gRepository = gRepository;
+    }
+
+    @GetMapping("/trainers")
+    public Iterable<Trainer> getTrainers() {
+        log.info("fetch and return books");
+        return tRepository.findAll();
+    }
+
+    @PostMapping("trainers")
+    Trainer newTrainer(@RequestBody Trainer newTrainer) {
+        log.info("save new trainer " + newTrainer);
+        return tRepository.save(newTrainer);
+    }
+
+    @PutMapping("/trainers/{id}")
+    Trainer editTrainer(@RequestBody Trainer editedTrainer, @PathVariable Long id) {
+        log.info("edit trainer " + editedTrainer);
+        editedTrainer.setId(id);
+        return tRepository.save(editedBook);
+    }
+
+    @DeleteMapping("/trainers/{id}")
+    public Iterable<Trainer> deleteTrainer(@PathVariable Long id) {
+        log.info("delete trainer, id = " + id);
+        tRepository.deleteById(id);
+        return tRepository.findAll();
+    }
+
+    @GetMapping("/trainers/{id}")
+    Optional<Trainer> getTrainer(@PathVariable Long id) {
+        log.info("find trainer, id = " + id);
+        return tRepository.findById(id);
+    }
+
+    @GetMapping("/exercises")
+    public Iterable<Exercise> getExercises() {
+        log.info("fetch and return exercises");
+        return eRepository.findAll();
+    }
+
+    @PostMapping("exercises")
+    Exercise newTrainer(@RequestBody Exercise newExercise) {
+        log.info("save new exercise " + newExercise);
+        return eRepository.save(newExercise);
+    }
+
+    @PutMapping("/exercises/{id}")
+    Exercise editExercise(@RequestBody Exercise editedExercise, @PathVariable Long id) {
+        log.info("edit exercise " + editedExercise);
+        editedExercise.setId(id);
+        return eRepository.save(editedBook);
+    }
+
+    @DeleteMapping("/exercises/{id}")
+    public Iterable<Exercise> deleteExercise(@PathVariable Long id) {
+        log.info("delete exercise, id = " + id);
+        eRepository.deleteById(id);
+        return eRepository.findAll();
+    }
+
+    @GetMapping("/exercises/{id}")
+    Optional<Exercise> getExercise(@PathVariable Long id) {
+        log.info("find exercise, id = " + id);
+        return eRepository.findById(id);
+    }
+
+    @GetMapping("/exercises/genre/{name}")
+    List<Exercise> getExercisesByGenre(@PathVariable String name) {
+        log.info("find exercises, category = " + name);
+        return eRepository.findByGenreGenre(name);
+    }
+}

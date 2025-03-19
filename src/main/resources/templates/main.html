@@ -11,7 +11,13 @@
     <div class="container py-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1>Etusivu</h1>
-            <p class="text-muted">Olet kirjautuneena: <strong><span sec:authentication="name">Name</span></strong></p>
+            <div>
+                <p class="text-muted">Olet kirjautuneena: <strong><span sec:authentication="name">Name</span></strong>
+                </p>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="btn btn-danger btn-sm">Kirjaudu ulos</button>
+                </form>
+            </div>
         </div>
 
         <h3 class="mb-3">Treenit</h3>
