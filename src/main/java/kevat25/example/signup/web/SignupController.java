@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.validation.Valid;
 import kevat25.example.signup.model.Attend;
 import kevat25.example.signup.model.AttendRepository;
 import kevat25.example.signup.model.Breed;
@@ -25,11 +27,9 @@ import kevat25.example.signup.model.Dog;
 import kevat25.example.signup.model.DogRepository;
 import kevat25.example.signup.model.Exercise;
 import kevat25.example.signup.model.ExerciseRepository;
-import kevat25.example.signup.model.Genre;
 import kevat25.example.signup.model.GenreRepository;
 import kevat25.example.signup.model.Trainer;
 import kevat25.example.signup.model.TrainerRepository;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class SignupController {
@@ -63,12 +63,6 @@ public class SignupController {
         return "main";
     }
 
-    @RequestMapping(value = "/trainers")
-    public String showAllTrainers(Model model) {
-        model.addAttribute("trainers", tRepository.findAll());
-        return "trainers";
-    }
-
     @RequestMapping(value = "/addexercise")
     public String addExercise(Model model) {
         model.addAttribute("exercise", new Exercise());
@@ -77,7 +71,7 @@ public class SignupController {
     }
 
     @PostMapping("/save")
-    public String saveExercise(@ModelAttribute("exercise") Exercise exercise, BindingResult bindingResult,
+    public String saveExercise(@Valid @ModelAttribute("exercise") Exercise exercise, BindingResult bindingResult,
             Model model) {
 
         if (bindingResult.hasErrors()) {
@@ -88,6 +82,40 @@ public class SignupController {
 
         eRepository.save(exercise);
         return "redirect:/main";
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @RequestMapping(value = "/edit/{id}")
+    public String editExercise(@PathVariable("id") Long exerciseId, Model model) {
+        Exercise exercise = eRepository.findById(exerciseId)
+                .orElseThrow(() -> new RuntimeException("Exercise not found"));
+        model.addAttribute("exercise", exercise);
+        model.addAttribute("genres", gRepository.findAll()); // Oletus: GenreRepository on olemassa
+        return "editexercise";
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/delete/{id}")
+    public String deleteExercise(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+
+        Exercise exercise = eRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Exercise not found"));
+
+        long attendCount = aRepository.countByExercise(exercise);
+
+        if (attendCount > 0) {
+            redirectAttributes.addFlashAttribute("error", "Harjoituksessa on osallistujia, joten sitä ei voi poistaa.");
+            return "redirect:/main";
+        }
+
+        eRepository.delete(exercise);
+        return "redirect:/main";
+    }
+
+    @RequestMapping(value = "/trainers")
+    public String showAllTrainers(Model model) {
+        model.addAttribute("trainers", tRepository.findAll());
+        return "trainers";
     }
 
     @RequestMapping(value = "/addtrainer")
@@ -123,6 +151,7 @@ public class SignupController {
         return "redirect:/main";
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/deletetrainer/{id}")
     public String deleteTrainer(@PathVariable Long id) {
 
@@ -174,25 +203,25 @@ public class SignupController {
 
     @RequestMapping("/adddog/{trainerId}")
     public String addDog(@PathVariable Long trainerId, Model model) {
-    model.addAttribute("dog", new Dog());
-    model.addAttribute("breeds", bRepository.findAll());
-    return "adddog";
-}
-
-@PostMapping("/adddog/{trainerId}")
-public String saveDog(@PathVariable Long trainerId, @ModelAttribute Dog dog) {
-   
-    Trainer trainer = tRepository.findById(trainerId).orElse(null);
-    if (trainer == null) {
-        return "redirect:/trainers"; 
+        model.addAttribute("dog", new Dog());
+        model.addAttribute("breeds", bRepository.findAll());
+        return "adddog";
     }
 
-    dog.setTrainer(trainer);
-    
-    dRepository.save(dog);
+    @PostMapping("/adddog/{trainerId}")
+    public String saveDog(@PathVariable Long trainerId, @ModelAttribute Dog dog) {
 
-    return "redirect:/trainers";
-}
+        Trainer trainer = tRepository.findById(trainerId).orElse(null);
+        if (trainer == null) {
+            return "redirect:/trainers";
+        }
+
+        dog.setTrainer(trainer);
+
+        dRepository.save(dog);
+
+        return "redirect:/trainers";
+    }
 
     @GetMapping("/editdog/{id}")
     public String showEditDogForm(@PathVariable Long id, Model model) {
@@ -274,22 +303,6 @@ public String saveDog(@PathVariable Long trainerId, @ModelAttribute Dog dog) {
         model.addAttribute("attendees", attendees);
 
         return "participants";
-    }
-
-    @RequestMapping(value = "/edit/{id}")
-    public String editExercise(@PathVariable("id") Long exerciseId, Model model) {
-        Exercise exercise = eRepository.findById(exerciseId)
-                .orElseThrow(() -> new RuntimeException("Exercise not found"));
-        model.addAttribute("exercise", exercise);
-        model.addAttribute("genres", gRepository.findAll()); // Oletus: GenreRepository on olemassa
-        return "editexercise";
-    }
-
-    @RequestMapping(value = "/saveExercise")
-    public String saveExercise(@ModelAttribute Exercise exercise, RedirectAttributes redirectAttributes) {
-        eRepository.save(exercise);
-        redirectAttributes.addFlashAttribute("message", "Exercise updated successfully!");
-        return "redirect:/main";
     }
 
 }

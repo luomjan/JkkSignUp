@@ -8,9 +8,9 @@
 </head>
 
 <body class="bg-light">
-    <div class="container py-4">
+    <div class="container py-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1>Etusivu</h1>
+            <h1 class="display-4">Etusivu</h1>
             <div>
                 <p class="text-muted">Olet kirjautuneena: <strong><span sec:authentication="name">Name</span></strong>
                 </p>
@@ -20,36 +20,45 @@
             </div>
         </div>
 
-        <h3 class="mb-3">Treenit</h3>
-        <div class="row">
-            <div class="col-md-6 col-lg-4 mb-3" th:each="exercise : ${exercises}">
-                <div class="card shadow-sm">
+        <h3 class="mb-4">Treenit</h3>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <div class="col" th:each="exercise : ${exercises}">
+                <div class="card shadow-sm h-100">
                     <div class="card-body">
                         <h5 class="card-title" th:text="${exercise.genre.genre}"></h5>
                         <p class="card-text">
                             <strong>Päivämäärä:</strong> <span th:text="${exercise.exerciseDay}"></span><br>
                             <strong>Aika:</strong> <span th:text="${exercise.exerciseTime}"></span><br>
-                            <strong>Paikka:</strong> <span th:text="${exercise.place}"></span>
+                            <strong>Paikka:</strong> <span th:text="${exercise.place}"></span><br>
+                            <strong>Kuvaus:</strong> <span th:text="${exercise.description}"></span>
                         </p>
-                        <div class="d-flex gap-2">
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <div>
                             <a th:href="@{/signin/{id}(id=${exercise.id})}"
                                 class="btn btn-success btn-sm">Ilmoittaudu</a>
-                            <a th:href="@{/edit/{id}(id=${exercise.id})}" class="btn btn-warning btn-sm">Muokkaa</a>
-                            <a th:href="@{/participants/{id}(id=${exercise.id})}"
-                                class="btn btn-info btn-sm">Osallistujat</a>
+                        </div>
+                        <div>
+                            <a th:href="@{/edit/{id}(id=${exercise.id})}" class="btn btn-warning btn-sm"
+                                sec:authorize="hasAuthority('ADMIN')">Muokkaa</a>
+                            <a th:href="@{/participants/{id}(id=${exercise.id})}" class="btn btn-info btn-sm"
+                                sec:authorize="hasAuthority('ADMIN')">Osallistujat</a>
+                            <form th:action="@{/delete/{id}(id=${exercise.id})}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm"
+                                    sec:authorize="hasAuthority('ADMIN')">Poista</button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="d-flex gap-3 mt-4">
-            <a href="/addexercise" class="btn btn-primary">Lisää treeni</a>
-            <a href="/addtrainer" class="btn btn-secondary">Lisää käyttäjä</a>
-            <a href="/trainers" class="btn btn-dark">Näytä kaikki käyttäjät</a>
+        <div class="d-flex gap-3 mt-5">
+            <a href="/addexercise" class="btn btn-primary btn-lg">Lisää treeni</a>
+            <a href="/addtrainer" class="btn btn-secondary btn-lg">Lisää käyttäjä</a>
+            <td sec:authorize="hasAuthority('ADMIN')"><a href="/trainers" class="btn btn-dark btn-lg">Näytä kaikki
+                    käyttäjät</a></td>
         </div>
-
-
     </div>
 </body>
 

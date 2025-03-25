@@ -3,6 +3,7 @@ package kevat25.example.signup.model;
 import java.util.List;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 public class Trainer {
@@ -11,7 +12,7 @@ public class Trainer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
-
+    
     @Column(nullable = false, unique = true)
     private String userName;
 

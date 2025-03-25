@@ -2,50 +2,66 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<title>Lisää treeni</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<link rel="stylesheet" href="/css/bootstrap.min.css">
+    <title>Lisää treeni</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
 </head>
 
 <body class="bg-light">
-	<div class="container">
-		<div class="py-5 text-center">
-			<h1>Lisää treeni</h1>
-		</div>
+    <div class="container">
+        <div class="py-5 text-center">
+            <h1>Lisää treeni</h1>
+        </div>
 
-		<div div class="container">
-			<form th:object="${exercise}" th:action="@{/save}" action="#" method="post">
-				<label for="genrelist">Laji</label>
-				<select id="genrelist" th:field="*{genre}" class="form-control">
-					<option th:each="genre: ${genres}" th:value="${genre.id}" th:text="${genre.genre}"></option>
-				</select>
+        <div class="container">
+            <form th:object="${exercise}" th:action="@{/save}" method="post">
+                
+                <div class="mb-3">
+                    <label for="genrelist">Laji</label>
+                    <select id="genrelist" th:field="*{genre.id}" class="form-control">
+                        <option th:each="genre: ${genres}" th:value="${genre.id}" th:text="${genre.genre}"></option>
+                    </select>
+                </div>
 
-				<div class="mb-3">
-					<label for="place" class="form-label">Paikka</label>
-					<input type="text" id="place" th:field="*{place}" class="form-control" />
-				</div>
+                <div class="mb-3">
+                    <label for="place" class="form-label">Paikka</label>
+                    <input type="text" id="place" th:field="*{place}" class="form-control" />
+                    <div th:if="${#fields.hasErrors('place')}" class="text-danger">
+                        <span th:errors="*{place}"></span>
+                    </div>
+                </div>
 
-				<div class="mb-3">
-					<label for="description" class="form-label">Kuvaus</label>
-					<input type="text" id="description" th:field="*{description}" class="form-control" />
-				</div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Kuvaus</label>
+                    <input type="text" id="description" th:field="*{description}" class="form-control" />
+                    <div th:if="${#fields.hasErrors('description')}" class="text-danger">
+                        <span th:errors="*{description}"></span>
+                    </div>
+                </div>
 
-				<div class="mb-3">
-					<label for="exerciseDay" class="form-label">Päivämäärä</label>
-					<input type="date" id="exerciseDay" th:field="*{exerciseDay}" class="form-control" />
-				</div>
+                <div class="mb-3">
+                    <label for="exerciseDay" class="form-label">Päivämäärä</label>
+                    <input type="date" id="exerciseDay" th:field="*{exerciseDay}" class="form-control" />
+                    <div th:if="${#fields.hasErrors('exerciseDay')}" class="text-danger">
+                        <span th:errors="*{exerciseDay}"></span>
+                    </div>
+                </div>
 
-				<div class="mb-3">
-					<label for="exerciseTime" class="form-label">Aika</label>
-					<input type="time" id="exerciseTime" th:field="*{exerciseTime}" class="form-control" />
-				</div>
+                <div class="mb-3">
+                    <label for="exerciseTime" class="form-label">Aika</label>
+                    <input type="time" id="exerciseTime" th:field="*{exerciseTime}" class="form-control" />
+                    <div th:if="${#fields.hasErrors('exerciseTime')}" class="text-danger">
+                        <span th:errors="*{exerciseTime}"></span>
+                    </div>
+                </div>
 
-				<div class="d-flex gap-2">
-					<button type="submit" class="btn btn-primary">Lisää treeni</button>
-					<a href="/main" class="btn btn-secondary">Peruuta</a>
-				</div>
-			</form>
-		</div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Lisää treeni</button>
+                    <a href="/main" class="btn btn-secondary">Peruuta</a>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 
 </html>

@@ -1,6 +1,8 @@
 package kevat25.example.signup.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -19,10 +21,18 @@ public class Exercise {
     @JoinColumn(name = "genre_id")
     private Genre genre;
 
+    @NotEmpty(message = "Paikka ei voi olla tyhjä")
+    @Size(min = 2, max = 250)
     private String place;
+
+    @NotEmpty(message = "Kuvaus ei voi olla tyhjä")
+    @Size(min = 2, max = 500)
     private String description;
 
+    @NotNull(message = "Päivä ei voi olla tyhjä")
     private LocalDate exerciseDay;
+
+    @NotNull(message = "Aika ei voi olla tyhjä")
     private LocalTime exerciseTime;
 
     public Exercise() {
