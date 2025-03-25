@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -98,20 +99,138 @@ public class SignupController {
     }
 
     @PostMapping("/savetrainer")
-    public String saveTrainerAndDog(@ModelAttribute Trainer trainer,
-            @ModelAttribute Dog dog,
-            @RequestParam Long dogBreedId) {
-
+    public String saveTrainerAndDogs(@ModelAttribute Trainer trainer) {
         trainer.setRole("USER");
+
+        if (trainer.getDogs() != null) {
+
+            trainer.getDogs().removeIf(dog -> dog.getName() == null || dog.getName().isEmpty());
+
+            for (Dog dog : trainer.getDogs()) {
+                if (dog.getBreed() != null && dog.getBreed().getBreedId() != null) {
+
+                    Breed breed = bRepository.findById(dog.getBreed().getBreedId()).orElse(null);
+                    if (breed != null) {
+                        dog.setBreed(breed);
+                    }
+                }
+                dog.setTrainer(trainer);
+            }
+        }
+
         tRepository.save(trainer);
 
-        Breed breed = bRepository.findById(dogBreedId).orElse(null);
-        dog.setBreed(breed);
-        dog.setTrainer(trainer);
-
-        dRepository.save(dog);
-
         return "redirect:/main";
+    }
+
+    @PostMapping("/deletetrainer/{id}")
+    public String deleteTrainer(@PathVariable Long id) {
+
+        Trainer trainer = tRepository.findById(id).orElse(null);
+
+        if (trainer != null) {
+
+            for (Dog dog : trainer.getDogs()) {
+                dRepository.delete(dog);
+            }
+
+            tRepository.delete(trainer);
+        }
+
+        return "redirect:/trainers";
+    }
+
+    @GetMapping("/edittrainer/{id}")
+    public String editTrainer(@PathVariable Long id, Model model) {
+        Trainer trainer = tRepository.findById(id).orElse(null);
+        if (trainer == null) {
+            return "redirect:/trainers";
+        }
+        model.addAttribute("trainer", trainer);
+        return "edittrainer";
+    }
+
+    @PostMapping("/saveonlytrainer")
+    public String editedTrainerOnly(@ModelAttribute("trainer") Trainer trainer, BindingResult bindingResult,
+            Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("trainer", trainer);
+            return "addtrainer";
+        }
+
+        Trainer existingTrainer = tRepository.findById(trainer.getId())
+                .orElseThrow(() -> new RuntimeException("Treenaaja ei löytynyt"));
+
+        existingTrainer.setFirstName(trainer.getFirstName());
+        existingTrainer.setLastName(trainer.getLastName());
+        existingTrainer.setRole(trainer.getRole());
+        existingTrainer.setPassword(trainer.getPassword());
+        existingTrainer.setUserName(trainer.getUserName());
+
+        tRepository.save(existingTrainer);
+
+        return "redirect:/trainers";
+    }
+
+    @RequestMapping("/adddog/{trainerId}")
+    public String addDog(@PathVariable Long trainerId, Model model) {
+    model.addAttribute("dog", new Dog());
+    model.addAttribute("breeds", bRepository.findAll());
+    return "adddog";
+}
+
+@PostMapping("/adddog/{trainerId}")
+public String saveDog(@PathVariable Long trainerId, @ModelAttribute Dog dog) {
+   
+    Trainer trainer = tRepository.findById(trainerId).orElse(null);
+    if (trainer == null) {
+        return "redirect:/trainers"; 
+    }
+
+    dog.setTrainer(trainer);
+    
+    dRepository.save(dog);
+
+    return "redirect:/trainers";
+}
+
+    @GetMapping("/editdog/{id}")
+    public String showEditDogForm(@PathVariable Long id, Model model) {
+        Dog dog = dRepository.findById(id).orElse(null);
+
+        model.addAttribute("dog", dog);
+        model.addAttribute("breeds", bRepository.findAll());
+
+        return "editdog";
+
+    }
+
+    @PostMapping("/savedog")
+    public String saveEditedDog(@ModelAttribute Dog dog) {
+
+        Dog existingDog = dRepository.findById(dog.getId()).orElse(null);
+
+        if (existingDog != null) {
+            existingDog.setName(dog.getName());
+            existingDog.setKennelName(dog.getKennelName());
+            existingDog.setBreed(dog.getBreed());
+
+            dRepository.save(existingDog);
+        }
+
+        return "redirect:/trainers";
+    }
+
+    @PostMapping("/deletedog/{id}")
+    public String deleteDog(@PathVariable Long id) {
+
+        Dog dog = dRepository.findById(id).orElse(null);
+
+        if (dog != null) {
+            dRepository.delete(dog);
+        }
+
+        return "redirect:/trainers";
     }
 
     @RequestMapping(value = "/signin/{id}")

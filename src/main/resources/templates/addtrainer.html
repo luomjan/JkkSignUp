@@ -5,6 +5,13 @@
     <title>Lisää treenaaja ja koira</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <script>
+        function toggleDogForm(dogFormId) {
+            var dogForm = document.getElementById(dogFormId);
+            dogForm.style.display = (dogForm.style.display === "none" || dogForm.style.display === "") ? "block" : "none";
+        }
+    </script>
 </head>
 
 <body class="bg-light">
@@ -15,7 +22,6 @@
 
         <form th:object="${trainer}" th:action="@{/savetrainer}" method="post">
             <div class="row">
-
                 <div class="col-md-6">
                     <h3>Treenaajan tiedot</h3>
                     <div class="mb-3">
@@ -39,30 +45,56 @@
                     </div>
                 </div>
 
-
                 <div class="col-md-6">
                     <h3>Koiran tiedot</h3>
-                    <div class="mb-3">
-                        <label for="dogName" class="form-label">Kutsumanimi</label>
-                        <input type="text" id="dogName" name="name" class="form-control" />
+
+                    <button type="button" class="btn btn-secondary mb-3" onclick="toggleDogForm('dogForm1')">Lisää
+                        koira</button>
+                    <div id="dogForm1" style="display: none;">
+                        <div class="mb-3">
+                            <label class="form-label">Kutsumanimi</label>
+                            <input type="text" th:field="*{dogs[0].name}" class="form-control" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Kennelnimi</label>
+                            <input type="text" th:field="*{dogs[0].kennelName}" class="form-control" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Rotu</label>
+                            <select th:field="*{dogs[0].breed.breedId}" class="form-control">
+                                <option value="">-- Valitse rotu --</option>
+                                <option th:each="breed : ${breeds}" th:value="${breed.breedId}"
+                                    th:text="${breed.breed}"></option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="kennelName" class="form-label">Kennelnimi</label>
-                        <input type="text" id="kennelName" name="kennelName" class="form-control" />
-                    </div>
+                    <button type="button" class="btn btn-secondary mb-3" onclick="toggleDogForm('dogForm2')">Lisää 2.
+                        koira</button>
+                    <div id="dogForm2" style="display: none;">
+                        <div class="mb-3">
+                            <label class="form-label">Kutsumanimi</label>
+                            <input type="text" th:field="*{dogs[1].name}" class="form-control" />
+                        </div>
 
-                    <div class="mb-3">
-                        <label for="breed" class="form-label">Rotu</label>
-                        <select id="breed" name="dogBreedId" class="form-control">
-                            <option value="">-- Valitse rotu --</option>
-                            <option th:each="breed : ${breeds}" th:value="${breed.breedId}" th:text="${breed.breed}">
-                            </option>
-                        </select>
+                        <div class="mb-3">
+                            <label class="form-label">Kennelnimi</label>
+                            <input type="text" th:field="*{dogs[1].kennelName}" class="form-control" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Rotu</label>
+                            <select th:field="*{dogs[1].breed.breedId}" class="form-control">
+                                <option value="">-- Valitse rotu --</option>
+                                <option th:each="breed : ${breeds}" th:value="${breed.breedId}"
+                                    th:text="${breed.breed}"></option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
-
 
             <div class="text-center mt-4">
                 <button type="submit" class="btn btn-primary">Tallenna</button>

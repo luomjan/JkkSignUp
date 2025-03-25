@@ -24,7 +24,7 @@
                     <select id="doglist" name="dogId" class="form-control form-control-lg" required>
                         <option value="">-- Valitse treenaaja --</option>
                         <option th:each="dog : ${dogs}" th:value="${dog.id}"
-                            th:text="${dog.name} + ' (' + ${dog.trainer.firstName} + ' ' + ${dog.trainer.lastName} + ')'">
+                            th:text="${dog.name} + ' - ' + ${dog.trainer.firstName} + ' ' + ${dog.trainer.lastName} + ''">
                         </option>
                     </select>
                 </div>

@@ -37,11 +37,16 @@ public class SignupApplication {
 		return (args) -> {
 
 			log.info("save trainers");
-			tRepository.save(new Trainer("admin", "$2a$05$s6rx2hOmx9N2bN6yqqxAO.nyDdOQDKHSKAR6wMjBNY2HGAtXiLx5q", "ADMIN", "Admin", "Admin"));
-			tRepository.save(new Trainer("user", "$2a$05$EyPQcXjdxcpuv11fIRBRku0qhCdRpm1wjKIw0dkftNA8tT2OHZGQO", "USER", "User", "User"));
-			tRepository.save(new Trainer("matti", "$2a$05$2yJeT4zjec0UXqLPaKInEuznKtoFgDKn8r4hYy7hgVpioyAPc7H6q", "USER", "Matti", "Meikäläinen"));
-			tRepository.save(new Trainer("maija", "$2a$05$KdR6qs51ApT2cKIiFEEaEuj5boYy3O/nAHRJsFUgtLIQ/DRUwZj2y", "ADMIN", "Maija", "Meikäläinen"));
-			tRepository.save(new Trainer("testi", "$2a$05$3RXpqTwujYbGQrOBiQJ1JeoTtPYME/EimhnVZMF00z.DVDaYHdLWi", "USER", "Testi", "Testinen"));
+			tRepository.save(new Trainer("admin", "$2a$05$s6rx2hOmx9N2bN6yqqxAO.nyDdOQDKHSKAR6wMjBNY2HGAtXiLx5q",
+					"ADMIN", "Admin", "Admin"));
+			tRepository.save(new Trainer("user", "$2a$05$EyPQcXjdxcpuv11fIRBRku0qhCdRpm1wjKIw0dkftNA8tT2OHZGQO", "USER",
+					"User", "User"));
+			tRepository.save(new Trainer("matti", "$2a$05$2yJeT4zjec0UXqLPaKInEuznKtoFgDKn8r4hYy7hgVpioyAPc7H6q",
+					"USER", "Matti", "Meikäläinen"));
+			tRepository.save(new Trainer("maija", "$2a$05$KdR6qs51ApT2cKIiFEEaEuj5boYy3O/nAHRJsFUgtLIQ/DRUwZj2y",
+					"ADMIN", "Maija", "Meikäläinen"));
+			tRepository.save(new Trainer("testi", "$2a$05$3RXpqTwujYbGQrOBiQJ1JeoTtPYME/EimhnVZMF00z.DVDaYHdLWi",
+					"USER", "Testi", "Testinen"));
 
 			log.info("save dog breeds");
 			bRepository.save(new Breed("Collie"));
@@ -52,7 +57,7 @@ public class SignupApplication {
 			Trainer admin = tRepository.findByFirstNameAndLastName("Admin", "Admin")
 					.orElseThrow(() -> new RuntimeException("Trainer not found!"));
 			Trainer user = tRepository.findByFirstNameAndLastName("User", "User")
-					.orElseThrow(() -> new RuntimeException("Trainer not found!"));		
+					.orElseThrow(() -> new RuntimeException("Trainer not found!"));
 			Trainer matti = tRepository.findByFirstNameAndLastName("Matti", "Meikäläinen")
 					.orElseThrow(() -> new RuntimeException("Trainer not found!"));
 			Trainer maija = tRepository.findByFirstNameAndLastName("Maija", "Meikäläinen")
@@ -82,18 +87,20 @@ public class SignupApplication {
 			gRepository.save(new Genre("Toko"));
 			gRepository.save(new Genre("Näyttely"));
 
-			Genre agility =gRepository.findByGenre("Agility")
-			.orElseThrow(() -> new RuntimeException("Genre not found!"));
-			Genre rallyToko =gRepository.findByGenre("Rally-toko")
-			.orElseThrow(() -> new RuntimeException("Genre not found!"));
-			Genre hoopers =gRepository.findByGenre("Hoopers")
-			.orElseThrow(() -> new RuntimeException("Genre not found!"));
+			Genre agility = gRepository.findByGenre("Agility")
+					.orElseThrow(() -> new RuntimeException("Genre not found!"));
+			Genre rallyToko = gRepository.findByGenre("Rally-toko")
+					.orElseThrow(() -> new RuntimeException("Genre not found!"));
+			Genre hoopers = gRepository.findByGenre("Hoopers")
+					.orElseThrow(() -> new RuntimeException("Genre not found!"));
 
 			log.info("add exercises");
-			eRepository.save(new Exercise(agility, "Vimpeli", "Omatoimi agility", LocalDate.of(2025, 2, 21), LocalTime.of(16, 0)));
-			eRepository.save(new Exercise(rallyToko, "Vimpeli", "Omatoimi agility", LocalDate.of(2025, 2, 21), LocalTime.of(16, 0)));
-			eRepository.save(new Exercise(hoopers, "Vimpeli", "Omatoimi agility", LocalDate.of(2025, 2, 21), LocalTime.of(16, 0)));
-
+			eRepository.save(new Exercise(agility, "Vimpeli", "Omatoimi agility", LocalDate.of(2025, 2, 21),
+					LocalTime.of(16, 0)));
+			eRepository.save(new Exercise(rallyToko, "Vimpeli", "Omatoimi agility", LocalDate.of(2025, 2, 21),
+					LocalTime.of(16, 0)));
+			eRepository.save(new Exercise(hoopers, "Vimpeli", "Omatoimi agility", LocalDate.of(2025, 2, 21),
+					LocalTime.of(16, 0)));
 
 		};
 	}

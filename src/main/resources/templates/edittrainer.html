@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Muokkaa käyttäjää</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">Muokkaa käyttäjää</h1>
+        <div class="card p-4">
+            <form th:object="${trainer}" th:action="@{/saveonlytrainer}" method="post">
+                <input type="hidden" th:field="*{id}" />
+
+                <div class="mb-3">
+                    <label for="userName" class="form-label">Käyttäjänimi</label>
+                    <input type="text" id="userName" th:field="*{userName}" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Salasana</label>
+                    <input type="password" id="password" th:field="*{password}" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="firstName" class="form-label">Etunimi</label>
+                    <input type="text" id="firstName" th:field="*{firstName}" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="lastName" class="form-label">Sukunimi</label>
+                    <input type="text" id="lastName" th:field="*{lastName}" class="form-control" />
+                </div>
+
+
+                <div class="mb-3">
+                    <label for="role" class="form-label">Rooli</label>
+                    <select id="role" th:field="*{role}" class="form-control">
+                        <option value="USER" th:selected="${trainer.role == 'USER'}">USER</option>
+                        <option value="ADMIN" th:selected="${trainer.role == 'ADMIN'}">ADMIN</option>
+                    </select>
+                </div>
+
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Tallenna muutokset</button>
+                    <a href="/trainers" class="btn btn-secondary">Peruuta</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

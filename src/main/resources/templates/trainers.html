@@ -18,6 +18,7 @@
             <th scope="col">Etunimi</th>
             <th scope="col">Sukunimi</th>
             <th scope="col">Koira(t)</th>
+            <th scope="col">Toiminnot</th>
         </tr>
         <tbody class="table-group-divider">
             <tr th:each="trainer : ${trainers}">
@@ -25,14 +26,30 @@
                 <td th:text="${trainer.lastName}"></td>
                 <td>
                     <ul>
-                        <li th:each="dog : ${trainer.dogs}" th:text="${dog.name}"></li>
+                        <li th:each="dog : ${trainer.dogs}">
+                            <span th:text="${dog.name}"></span>
+                            <div class="btn-group btn-group-sm ml-2" role="group">
+                                <a th:href="@{/editdog/{id}(id=${dog.id})}" class="btn btn-primary btn-sm">Muokkaa</a>
+                                <form th:action="@{/deletedog/{id}(id=${dog.id})}" method="post"
+                                    style="display:inline;">
+                                    <button type="submit" class="btn btn-danger btn-sm">Poista</button>
+                                </form>
+                            </div>
+                        </li>
                     </ul>
+                </td>
+                <td>
+                    <a th:href="@{/edittrainer/{id}(id=${trainer.id})}" class="btn btn-primary btn-sm">Muokkaa</a>
+                    <form th:action="@{/deletetrainer/{id}(id=${trainer.id})}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm">Poista</button>
+                    </form>
+                    <a th:href="@{/adddog/{trainerId}(trainerId=${trainer.id})}" class="btn btn-success btn-sm">Lisää
+                        koira</a>
                 </td>
             </tr>
         </tbody>
         <tr th:if="${#lists.isEmpty(trainers)}">
-            <td colspan="3">Ei treenaajia</td>
-
+            <td colspan="4">Ei treenaajia</td>
         </tr>
     </table>
     <div class="text-center mt-4">

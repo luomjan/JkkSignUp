@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Muokkaa koiraa</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">Muokkaa koiraa</h1>
+        <div class="card p-4">
+            <form th:object="${dog}" th:action="@{/savedog}" method="post">
+                <input type="hidden" th:field="*{id}" />
+
+                <div class="mb-3">
+                    <label for="name" class="form-label">Kutsumanimi</label>
+                    <input type="text" id="name" th:field="*{name}" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="kennelName" class="form-label">Virallinen nimi</label>
+                    <input type="text" id="kennelName" th:field="*{kennelName}" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Rotu</label>
+                    <select th:field="*{breed.breedId}" class="form-control">
+                        <option value="">-- Valitse rotu --</option>
+                        <option th:each="breed : ${breeds}" th:value="${breed.breedId}"
+                            th:text="${breed.breed}"></option>
+                    </select>
+                </div>
+
+
+                <div class="mb-3">
+                    <label for="trainer" class="form-label">Treenaaja</label>
+                    <input type="text" id="trainer" th:field="*{trainer.firstName}" class="form-control" disabled />
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Tallenna muutokset</button>
+                    <a href="/trainers" class="btn btn-secondary">Peruuta</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+    <title>Lisää Koira</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container mt-4">
+        <h1 class="text-primary">Lisää koira</h1>
+        
+        <!-- Lomake koiran tiedoille -->
+        <form th:action="@{/adddog/{trainerId}(trainerId=${trainerId})}" method="post" th:object="${dog}">
+            <div class="mb-3">
+                <label for="name" class="form-label">Kutsumanimi</label>
+                <input type="text" id="name" th:field="*{name}" required class="form-control" placeholder="Kutsumanimi" />
+            </div>
+
+            <div class="mb-3">
+                <label for="kennelName" class="form-label">Virallinen nimi</label>
+                <input type="text" id="kennelName" th:field="*{kennelName}" required class="form-control" placeholder="Virallinen nimi" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Rotu</label>
+                <select th:field="*{breed.breedId}" class="form-control">
+                    <option value="">-- Valitse rotu --</option>
+                    <option th:each="breed : ${breeds}" th:value="${breed.breedId}"
+                        th:text="${breed.breed}"></option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3">Lisää koira</button>
+        </form>
+
+        <div class="mt-3">
+            <a href="/trainers" class="btn btn-secondary">Takaisin treenaajat-sivulle</a>
+        </div>
+    </div>
+
+    <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
