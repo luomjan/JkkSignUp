@@ -163,7 +163,6 @@ public class SignupController {
 
         if (trainer != null) {
 
-
             for (Dog dog : trainer.getDogs()) {
                 if (aRepository.existsByDog(dog)) {
                     dog.setActivity(false);

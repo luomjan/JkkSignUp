@@ -97,9 +97,9 @@ public class SignupApplication {
 			log.info("add exercises");
 			eRepository.save(new Exercise(agility, "Vimpeli", "Omatoimi agility", LocalDate.of(2025, 2, 21),
 					LocalTime.of(16, 0)));
-			eRepository.save(new Exercise(rallyToko, "Vimpeli", "Omatoimi agility", LocalDate.of(2025, 2, 21),
+			eRepository.save(new Exercise(rallyToko, "Alajärvi", "Yhteis tokoa", LocalDate.of(2025, 2, 21),
 					LocalTime.of(16, 0)));
-			eRepository.save(new Exercise(hoopers, "Vimpeli", "Omatoimi agility", LocalDate.of(2025, 2, 21),
+			eRepository.save(new Exercise(hoopers, "Vimpeli", "Helenan juttu, rapainen kenttä", LocalDate.of(2025, 2, 21),
 					LocalTime.of(16, 0)));
 
 		};
