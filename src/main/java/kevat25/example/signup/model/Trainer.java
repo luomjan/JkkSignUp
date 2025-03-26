@@ -32,6 +32,9 @@ public class Trainer {
     @OneToMany(mappedBy = "trainer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Dog> dogs;
 
+    @Column
+    private boolean activity;
+
     public Trainer() {
     }
 
@@ -44,6 +47,7 @@ public class Trainer {
         this.role = role;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.activity = true;
     }
 
 
@@ -135,6 +139,20 @@ public class Trainer {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+
+
+
+    public boolean isActivity() {
+        return activity;
+    }
+
+
+
+
+    public void setActivity(boolean activity) {
+        this.activity = activity;
     }
 
     

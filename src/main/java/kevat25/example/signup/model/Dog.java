@@ -24,6 +24,9 @@ public class Dog {
     @JoinColumn(name = "breed_id", nullable = false)
     private Breed breed;
 
+    @Column
+    private boolean activity;
+
     public Dog() {
     }
 
@@ -32,8 +35,8 @@ public class Dog {
         this.kennelName = kennelName;
         this.trainer = trainer;
         this.breed = breed;
+        this.activity = true;
     }
-    
 
     public Dog(String name, String kennelName) {
         this.name = name;
@@ -94,4 +97,17 @@ public class Dog {
         this.breed = breed;
     }
 
+    public boolean getActivity() {
+        return activity;
+    }
+
+    public void setActivity(boolean activity) {
+        this.activity = activity;
+    }
+
+    @Override
+    public String toString() {
+        return "Dog [id=" + id + ", name=" + name + ", kennelName=" + kennelName + ", trainer=" + trainer + ", breed="
+                + breed + ", activity=" + activity + "]";
+    }
 }

@@ -90,7 +90,7 @@ public class SignupController {
         Exercise exercise = eRepository.findById(exerciseId)
                 .orElseThrow(() -> new RuntimeException("Exercise not found"));
         model.addAttribute("exercise", exercise);
-        model.addAttribute("genres", gRepository.findAll()); // Oletus: GenreRepository on olemassa
+        model.addAttribute("genres", gRepository.findAll());
         return "editexercise";
     }
 
@@ -145,7 +145,8 @@ public class SignupController {
                 dog.setTrainer(trainer);
             }
         }
-
+        
+        trainer.setActivity(true);
         tRepository.save(trainer);
 
         return "redirect:/main";
@@ -154,16 +155,30 @@ public class SignupController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/deletetrainer/{id}")
     public String deleteTrainer(@PathVariable Long id) {
-
         Trainer trainer = tRepository.findById(id).orElse(null);
 
         if (trainer != null) {
+            boolean hasActiveDogs = false; 
 
             for (Dog dog : trainer.getDogs()) {
-                dRepository.delete(dog);
+                if (aRepository.existsByDog(dog)) {
+                    dog.setActivity(false);
+                    dRepository.save(dog); 
+                } else {
+                    dRepository.delete(dog);
+                }
+
+                if (dog.getActivity()) {
+                    hasActiveDogs = true;
+                }
             }
 
-            tRepository.delete(trainer);
+            if (!hasActiveDogs) {
+                tRepository.delete(trainer);
+            } else {
+                trainer.setActivity(false);
+                tRepository.save(trainer); 
+            }
         }
 
         return "redirect:/trainers";
@@ -217,7 +232,8 @@ public class SignupController {
         }
 
         dog.setTrainer(trainer);
-
+        
+        dog.setActivity(true);
         dRepository.save(dog);
 
         return "redirect:/trainers";
@@ -252,11 +268,15 @@ public class SignupController {
 
     @PostMapping("/deletedog/{id}")
     public String deleteDog(@PathVariable Long id) {
-
         Dog dog = dRepository.findById(id).orElse(null);
 
         if (dog != null) {
-            dRepository.delete(dog);
+            if (!aRepository.existsByDog(dog)) {
+                dRepository.delete(dog);
+            } else {
+                dog.setActivity(false);
+                dRepository.save(dog);
+            }
         }
 
         return "redirect:/trainers";

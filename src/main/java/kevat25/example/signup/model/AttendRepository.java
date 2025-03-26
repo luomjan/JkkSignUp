@@ -8,5 +8,6 @@ public interface AttendRepository extends CrudRepository<Attend, Long> {
 
     List<Attend> findByExercise(Exercise exercise);
     long countByExercise(Exercise exercise);
+    boolean existsByDog(Dog dog);
 
 }
