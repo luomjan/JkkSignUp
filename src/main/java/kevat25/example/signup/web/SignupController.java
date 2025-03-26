@@ -73,13 +73,17 @@ public class SignupController {
     @PostMapping("/save")
     public String saveExercise(@Valid @ModelAttribute("exercise") Exercise exercise, BindingResult bindingResult,
             Model model) {
-
+    
         if (bindingResult.hasErrors()) {
             model.addAttribute("exercise", exercise);
             model.addAttribute("genres", gRepository.findAll());
             return "addexercise";
         }
-
+    
+        if (exercise.getGenre() != null && exercise.getGenre().getId() == null) {
+            gRepository.save(exercise.getGenre());
+        }
+    
         eRepository.save(exercise);
         return "redirect:/main";
     }
@@ -158,7 +162,7 @@ public class SignupController {
         Trainer trainer = tRepository.findById(id).orElse(null);
 
         if (trainer != null) {
-            boolean hasActiveDogs = false; 
+
 
             for (Dog dog : trainer.getDogs()) {
                 if (aRepository.existsByDog(dog)) {
@@ -167,13 +171,9 @@ public class SignupController {
                 } else {
                     dRepository.delete(dog);
                 }
+             }
 
-                if (dog.getActivity()) {
-                    hasActiveDogs = true;
-                }
-            }
-
-            if (!hasActiveDogs) {
+            if (trainer.getDogs().size() == 0 ) {
                 tRepository.delete(trainer);
             } else {
                 trainer.setActivity(false);

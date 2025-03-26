@@ -17,9 +17,9 @@
             <form th:object="${exercise}" th:action="@{/save}" method="post">
                 
                 <div class="mb-3">
-                    <label for="genrelist">Laji</label>
-                    <select id="genrelist" th:field="*{genre.id}" class="form-control">
-                        <option th:each="genre: ${genres}" th:value="${genre.id}" th:text="${genre.genre}"></option>
+                    <label for="genre" class="form-label">Laji</label>
+                    <select id="genre" th:field="*{genre}" class="form-control">
+                        <option th:each="genre : ${genres}" th:value="${genre.id}" th:text="${genre.genre}"></option>
                     </select>
                 </div>
 
