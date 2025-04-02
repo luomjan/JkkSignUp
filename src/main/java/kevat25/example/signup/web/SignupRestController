@@ -1,3 +1,5 @@
+package kevat25.example.signup.web;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +25,7 @@ public class SignupRestController {
 
     public SignupRestController(AttendRepository aRepository, DogRepository dRepository, ExerciseRepository eRepository, TrainerRepository tRepository, GenreRepository gRepository){
         this.aRepository = aRepository;
-        this.dRepository = dReposiroty;
+        this.dRepository = dRepository;
         this.eRepository = eRepository;
         this.tRepository = tRepository;
         this.gRepository = gRepository;
@@ -31,11 +33,11 @@ public class SignupRestController {
 
     @GetMapping("/trainers")
     public Iterable<Trainer> getTrainers() {
-        log.info("fetch and return books");
+        log.info("fetch and return trainers");
         return tRepository.findAll();
     }
 
-    @PostMapping("trainers")
+    @PostMapping("/trainers")
     Trainer newTrainer(@RequestBody Trainer newTrainer) {
         log.info("save new trainer " + newTrainer);
         return tRepository.save(newTrainer);
@@ -45,7 +47,7 @@ public class SignupRestController {
     Trainer editTrainer(@RequestBody Trainer editedTrainer, @PathVariable Long id) {
         log.info("edit trainer " + editedTrainer);
         editedTrainer.setId(id);
-        return tRepository.save(editedBook);
+        return tRepository.save(editedTrainer);
     }
 
     @DeleteMapping("/trainers/{id}")
@@ -67,8 +69,8 @@ public class SignupRestController {
         return eRepository.findAll();
     }
 
-    @PostMapping("exercises")
-    Exercise newTrainer(@RequestBody Exercise newExercise) {
+    @PostMapping("/exercises")
+    Exercise newExercise(@RequestBody Exercise newExercise) {
         log.info("save new exercise " + newExercise);
         return eRepository.save(newExercise);
     }
@@ -77,7 +79,7 @@ public class SignupRestController {
     Exercise editExercise(@RequestBody Exercise editedExercise, @PathVariable Long id) {
         log.info("edit exercise " + editedExercise);
         editedExercise.setId(id);
-        return eRepository.save(editedBook);
+        return eRepository.save(editedExercise);
     }
 
     @DeleteMapping("/exercises/{id}")
