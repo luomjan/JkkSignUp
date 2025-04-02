@@ -73,17 +73,17 @@ public class SignupController {
     @PostMapping("/save")
     public String saveExercise(@Valid @ModelAttribute("exercise") Exercise exercise, BindingResult bindingResult,
             Model model) {
-    
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("exercise", exercise);
             model.addAttribute("genres", gRepository.findAll());
             return "addexercise";
         }
-    
+
         if (exercise.getGenre() != null && exercise.getGenre().getId() == null) {
             gRepository.save(exercise.getGenre());
         }
-    
+
         eRepository.save(exercise);
         return "redirect:/main";
     }
@@ -116,7 +116,7 @@ public class SignupController {
         return "redirect:/main";
     }
 
-    @RequestMapping(value = "/trainers")
+    @RequestMapping(value = "/trainerlist")
     public String showAllTrainers(Model model) {
         model.addAttribute("trainers", tRepository.findAll());
         return "trainers";
@@ -149,7 +149,7 @@ public class SignupController {
                 dog.setTrainer(trainer);
             }
         }
-        
+
         trainer.setActivity(true);
         tRepository.save(trainer);
 
@@ -166,21 +166,21 @@ public class SignupController {
             for (Dog dog : trainer.getDogs()) {
                 if (aRepository.existsByDog(dog)) {
                     dog.setActivity(false);
-                    dRepository.save(dog); 
+                    dRepository.save(dog);
                 } else {
                     dRepository.delete(dog);
                 }
-             }
+            }
 
-            if (trainer.getDogs().size() == 0 ) {
+            if (trainer.getDogs().size() == 0) {
                 tRepository.delete(trainer);
             } else {
                 trainer.setActivity(false);
-                tRepository.save(trainer); 
+                tRepository.save(trainer);
             }
         }
 
-        return "redirect:/trainers";
+        return "redirect:/trainerlist";
     }
 
     @GetMapping("/edittrainer/{id}")
@@ -212,7 +212,7 @@ public class SignupController {
 
         tRepository.save(existingTrainer);
 
-        return "redirect:/trainers";
+        return "redirect:/trainerlist";
     }
 
     @RequestMapping("/adddog/{trainerId}")
@@ -227,15 +227,15 @@ public class SignupController {
 
         Trainer trainer = tRepository.findById(trainerId).orElse(null);
         if (trainer == null) {
-            return "redirect:/trainers";
+            return "redirect:/trainerlist";
         }
 
         dog.setTrainer(trainer);
-        
+
         dog.setActivity(true);
         dRepository.save(dog);
 
-        return "redirect:/trainers";
+        return "redirect:/trainerlist";
     }
 
     @GetMapping("/editdog/{id}")
@@ -262,7 +262,7 @@ public class SignupController {
             dRepository.save(existingDog);
         }
 
-        return "redirect:/trainers";
+        return "redirect:/trainerlist";
     }
 
     @PostMapping("/deletedog/{id}")
@@ -278,7 +278,7 @@ public class SignupController {
             }
         }
 
-        return "redirect:/trainers";
+        return "redirect:/trainerlist";
     }
 
     @RequestMapping(value = "/signin/{id}")

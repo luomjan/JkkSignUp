@@ -3,7 +3,6 @@ package kevat25.example.signup.model;
 import java.util.List;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 
 @Entity
 public class Trainer {
